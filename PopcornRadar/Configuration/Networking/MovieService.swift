@@ -2,7 +2,7 @@ import Foundation
 
 final class MovieService
 {
-    static let sharet = MovieService()
+    static let shared = MovieService()
     private init(){}
     
     func getPopularMovies(page: Int = 1)async throws -> MovieResponse{
