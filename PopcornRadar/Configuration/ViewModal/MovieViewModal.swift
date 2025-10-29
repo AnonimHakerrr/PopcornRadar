@@ -2,11 +2,9 @@ import Foundation
 import Combine
 
 @MainActor
-final class MoviesViewModel: ObservableObject {
+final class MoviesViewModel: BaseViewModel {
     @Published var popularMovies: [Movie] = []
     @Published var trendingMovies: [Movie] = []
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String?
     
     private let service: MovieService
     
@@ -16,32 +14,18 @@ final class MoviesViewModel: ObservableObject {
     
     func loadPopularMovies() async {
         await fetchData(
-            loader: { try await self.service.getPopularMovies(page: 1) },
+            on: self,
+            loader: { try await self.service.getPopularMovies(page: 1).results },
             assignTo: \.popularMovies
         )
     }
     
     func loadTrendingMovies() async {
         await fetchData(
-            loader: { try await self.service.getTrending(timeWindow: "day") },
+            on: self,
+            loader: { try await self.service.getTrending(timeWindow:.day).results },
             assignTo: \.trendingMovies
         )
     }
     
-    private func fetchData(
-            loader: @escaping () async throws -> MovieResponse,
-            assignTo keyPath: ReferenceWritableKeyPath<MoviesViewModel, [Movie]>
-        ) async {
-            isLoading = true
-            errorMessage = nil
-
-            do {
-                let response = try await loader()
-                self[keyPath: keyPath] = response.results
-            } catch {
-                errorMessage = "Помилка: \(error.localizedDescription)"
-            }
-
-            isLoading = false
-        }
 }
