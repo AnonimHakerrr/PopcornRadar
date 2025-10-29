@@ -13,7 +13,7 @@ final class MovieService
         )
     }
     
-    func getTrending(timeWindow: String = "day") async throws -> MovieResponse {
+    func getTrending(timeWindow: TimeWindow = .day) async throws -> MovieResponse {
         let endpoint = MovieEndpoint.trending(timeWindow: timeWindow)
         return try await Networking.shared.request(
             endpoint: endpoint.path,
@@ -36,4 +36,21 @@ final class MovieService
             queryItems: endpoint.queryItems
         )
     }
+    
+    func getGenres() async throws -> GenreResponse {
+        let endpoint = MovieEndpoint.genres
+        return try await Networking.shared.request(
+            endpoint: endpoint.path,
+            queryItems: endpoint.queryItems
+        )
+    }
+    
+    func getMoviesByGenre(genreID: Int, page: Int = 1) async throws -> MovieResponse {
+        let endpoint = MovieEndpoint.discovery(genreID: genreID, page: page)
+        return try await Networking.shared.request(
+            endpoint: endpoint.path,
+            queryItems: endpoint.queryItems
+        )
+    }
+
 }
