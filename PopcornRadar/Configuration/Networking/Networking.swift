@@ -28,7 +28,6 @@ final class Networking {
         
         components.queryItems = (components.queryItems ?? []) + queryItems
         
-        // Append api_key if not already present and if available
         if let key = apiKey,
            !(components.queryItems?.contains(where: { $0.name == "api_key" }) ?? false) {
             components.queryItems = (components.queryItems ?? []) + [URLQueryItem(name: "api_key", value: key)]
@@ -41,7 +40,7 @@ final class Networking {
         var request = URLRequest(url: url)
         request.httpMethod = httpMethod
         request.timeoutInterval = 15
-        
+        print("request \(request)")
         headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
         
         do {
@@ -54,7 +53,7 @@ final class Networking {
             guard 200..<300 ~= http.statusCode else {
                 throw NetworkError.badResponse(http.statusCode)
             }
-            
+        
             do {
                 return try jsonDecoder.decode(T.self, from: data)
             } catch {
