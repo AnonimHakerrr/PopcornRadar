@@ -1,5 +1,6 @@
 import Foundation
 enum TimeWindow: String { case day, week }
+
 enum MovieEndpoint
 {
     case popular(page: Int = 1)

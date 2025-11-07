@@ -17,17 +17,14 @@ final class GenreViewModal:BaseViewModel{
             on: self,
             loader: { try await self.service.getGenres().genres },
             assignTo: \.genres)
-        print("✅ Genres loaded: \(genres)")
     }
     
     func loadMovies(for genreID: Int) async {
-        print("🔄 Loading movies for genre \(genreID)")
         await fetchData(
             on: self,
             loader: { try await self.service.getMoviesByGenre(genreID: genreID).results},
             assignToDict: genreID,
             in: \.genreMovies
         )
-        print("✅ Loaded \(genreMovies[genreID]?.count ?? 0) movies for genre \(genreID)")
     }
 }

@@ -22,7 +22,6 @@ struct GenresView: View {
                     
                     ScrollView {
                         VStack(spacing: 24) {
-                            // 🏷️ Заголовок
                             Text("Оберіть категорію 🎬")
                                 .font(.largeTitle.bold())
                                 .foregroundColor(.white)

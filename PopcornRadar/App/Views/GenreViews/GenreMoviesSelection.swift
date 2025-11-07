@@ -15,13 +15,15 @@ struct GenreMoviesSelection: View {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 20) {
                     ForEach(movies) { movie in
-                        VStack(alignment: .center, spacing: 10) {
+                        NavigationLink {
+                            DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id ))
+                        } label: { VStack(alignment: .center, spacing: 10){
                             AsyncImage(url: movie.posterURL) { image in
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 450)
+                                    .frame(minHeight: 150)
                                     .cornerRadius(16)
                                     .shadow(radius: 10)
                             } placeholder: {
@@ -36,7 +38,7 @@ struct GenreMoviesSelection: View {
                                 .multilineTextAlignment(.center)
                         }
                         .padding(.horizontal)
-                    }
+                        }}
                 }
                 .padding(.bottom, 30)
             }

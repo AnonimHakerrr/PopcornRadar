@@ -32,7 +32,6 @@ struct FlowLayout: Layout {
         }
     }
 
-    // MARK: - Layout Calculation Helper
     private func layout(sizes: [CGSize],
                         spacing: CGFloat,
                         containerWidth: CGFloat) -> (size: CGSize, offsets: [CGPoint]) {

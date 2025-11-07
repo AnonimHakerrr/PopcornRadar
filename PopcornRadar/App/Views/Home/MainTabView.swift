@@ -14,7 +14,7 @@ struct MainTabView:View {
             
             WatchlistView()
                 .tabItem {
-                    Label("Дивитись пізніше", systemImage: "heart.fill")
+                    Label("Дивитись пізніше", systemImage: "bookmark.fill")
                 }
             
             SearchView()
@@ -27,5 +27,6 @@ struct MainTabView:View {
 }
 #Preview {
     MainTabView()
+        .environmentObject(WatchlistViewModel())
     
 }

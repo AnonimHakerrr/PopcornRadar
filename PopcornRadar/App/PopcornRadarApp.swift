@@ -2,9 +2,10 @@ import SwiftUI
 
 @main
 struct PopcornRadarApp: App {
+    @StateObject  var watchlistVM = WatchlistViewModel()
     var body: some Scene {
         WindowGroup {
-            MainTabView() // головна View
+            MainTabView().environmentObject(watchlistVM)
         }
     }
 }
