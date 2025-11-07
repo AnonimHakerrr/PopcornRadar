@@ -33,8 +33,6 @@ final class WatchlistViewModel: BaseViewModel {
                                    title: movie.title,
                                    posterPath: movie.posterPath ?? movie.posterURL?.path)
             watchlist.append(saved)
-            print("list - \(watchlist) \n saved - \(saved.posterURL)")
-
         }
         saveWatchlist()
     }
