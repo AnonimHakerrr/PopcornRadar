@@ -30,20 +30,23 @@ enum MovieEndpoint
     var queryItems: [URLQueryItem] {
         switch self {
         case .popular(let page):
-            return [URLQueryItem(name: "page", value: "\(page)")]
+            return [URLQueryItem(name: "page", value: "\(page)"),
+                    URLQueryItem(name: "language", value: "uk-UA")]
         case .trending:
-            return []
+            return [URLQueryItem(name: "language", value: "uk-UA")]
         case .details:
-            return []
+            return [URLQueryItem(name: "language", value: "uk-UA")]
         case .discovery(genreID: let genreID, page: let page):
             return [
                 URLQueryItem(name: "with_genres", value: "\(genreID)"),
-                URLQueryItem(name: "page", value: "\(page)")
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "language", value: "uk-UA")
             ]
         case .search(let query, let page):
             return [
                 URLQueryItem(name: "query", value: query),
-                URLQueryItem(name: "page", value: "\(page)")
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "language", value: "uk-UA")
             ]
         case .genres:
                 return [URLQueryItem(name: "language", value: "uk-UA")]

@@ -23,20 +23,25 @@ class BaseViewModel: ObservableObject {
         
         owner.isLoading = false
     }
-    func fetchData<Owner: BaseViewModel, K: Hashable, V>(
+    func fetchDataAppendToDict<Owner: BaseViewModel, K: Hashable, V: Collection>(
         on owner: Owner,
         loader: @escaping () async throws -> V,
-        assignToDict key: K,
-        in dictKeyPath: ReferenceWritableKeyPath<Owner, [K: V]>
+        key: K,
+        in dictKeyPath: ReferenceWritableKeyPath<Owner, [K: [V.Element]]>
     ) async {
         owner.isLoading = true
         owner.errorMessage = nil
         
         do {
-            let result = try await loader()
+            let newItems = try await loader()
+            
             var dict = owner[keyPath: dictKeyPath]
-            dict[key] = result
+            var currentItems = dict[key] ?? []          // якщо нема — створюємо
+            currentItems.append(contentsOf: newItems)   // ДОГРУЖАЄМО
+            dict[key] = currentItems
+            
             owner[keyPath: dictKeyPath] = dict
+            
         } catch {
             owner.errorMessage = "Помилка: \(error.localizedDescription)"
         }

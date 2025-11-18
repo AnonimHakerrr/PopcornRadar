@@ -8,12 +8,21 @@ struct GenreMoviesView: View {
         ZStack {
             
             if let movies = genreVM.genreMovies[genre.id] {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        GenreMoviesSelection(title: genre.name, movies: movies)
+                //                ScrollView {
+                //                    VStack(alignment: .leading, spacing: 20) {
+                //                        GenreMoviesSelection(title: genre.name, movies: movies)
+                //                    }
+                //                    .padding(.top, 10)
+                //                }
+                GenreMoviesSelection(
+                    title: genre.name,
+                    movies: movies,
+                    onReachEnd: {
+                        Task {
+                            await genreVM.loadMoreIfNeeded(for: genre.id)
+                        }
                     }
-                    .padding(.top, 10)
-                }
+                )
             } else if genreVM.isLoading {
                 ProgressView("Завантаження \(genre.name)...")
                     .tint(.pink)

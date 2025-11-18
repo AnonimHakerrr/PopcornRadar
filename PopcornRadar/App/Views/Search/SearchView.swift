@@ -9,8 +9,9 @@ struct SearchView: View {
                 Color.clear.backgroundView().ignoresSafeArea()
                 
                 VStack {
-                    // Поле пошуку
+                    
                     HStack {
+                        
                         Image(systemName: "magnifyingglass")
                         TextField("Пошук фільмів...", text: $viewModel.query)
                             .textFieldStyle(.plain)
@@ -20,21 +21,23 @@ struct SearchView: View {
                             Button {
                                 viewModel.query = ""
                             } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
+                                if viewModel.isLoading {
+                                    ProgressView()
+                                        .foregroundColor(.white)
+                                    
+                                }else{Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
+                        
                     }
                     .padding()
                     .background(Color.white.opacity(0.1))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     
-                    if viewModel.isLoading {
-                        ProgressView("Пошук...")
-                            .foregroundColor(.white)
-                            .padding(.top)
-                    }
+                    
                     
                     ScrollView {
                         LazyVStack(spacing: 16) {
@@ -59,8 +62,8 @@ struct SearchView: View {
                                                 .font(.headline)
                                             
                                             Label("\(movie.voteAverage, specifier: "%.1f")", systemImage: "star.fill")
-                                                    .foregroundColor(.yellow)
-                                                    .font(.subheadline)
+                                                .foregroundColor(.yellow)
+                                                .font(.subheadline)
                                             
                                         }
                                         Spacer()

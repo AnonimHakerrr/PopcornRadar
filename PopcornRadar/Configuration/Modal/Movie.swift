@@ -13,3 +13,9 @@ struct Movie: Decodable,Identifiable
             return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
         }
 }
+
+extension Movie: Equatable {
+    static func == (lhs: Movie, rhs: Movie) -> Bool {
+        lhs.id == rhs.id
+    }
+}

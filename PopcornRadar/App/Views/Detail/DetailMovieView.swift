@@ -53,12 +53,12 @@ struct DetailMovieView: View {
                                     ? "Видалити"
                                     : "Дивитись пізніше",
                                     systemImage: watchlistVM.isSaved(movie: viewDetailModel.detailMoview!)
-                                    ? "bookmark.fill"
+                                    ? "trash.fill"
                                     : "bookmark"
                                 )
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(.orange)
+                            .tint(watchlistVM.isSaved(movie: viewDetailModel.detailMoview!) ? .red : .orange)
 
 
                         }

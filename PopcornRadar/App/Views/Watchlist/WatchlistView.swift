@@ -27,13 +27,17 @@ struct WatchlistView: View {
                         VStack(spacing: 16) {
                             ForEach(watchlistVM.watchlist, id: \.id) { saved in
                                 
-                                HStack(spacing: 12) {
+                                NavigationLink {
+                                    DetailMovieView(
+                                        viewDetailModel: DetailViewModel(movieID: saved.id)
+                                    )
+                                } label: { HStack(spacing: 12) {
                                     ReliableAsyncImage(url: saved.posterURL)
                                         .frame(width: 100, height: 150)
                                         .cornerRadius(10)
                                         .clipped()
-
-
+                                    
+                                    
                                     
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text(saved.title)
@@ -41,22 +45,16 @@ struct WatchlistView: View {
                                             .font(.headline)
                                             .lineLimit(2)
                                         
-                                       
                                         
-                                        NavigationLink {
-                                            DetailMovieView(
-                                                viewDetailModel: DetailViewModel(movieID: saved.id)
-                                            )
-                                        } label: {
-                                            Text("Деталі")
-                                                .font(.callout)
-                                                .foregroundColor(.orange)
-                                        }
+                                        
+                                        
+                                        Text("Деталі")
+                                            .font(.callout)
+                                            .foregroundColor(.orange)
                                     }
+                                }
                                     
                                     Spacer()
-                                    
-                                    // delete
                                     Button {
                                         watchlistVM.remove(saved)
                                     } label: {
@@ -67,7 +65,7 @@ struct WatchlistView: View {
                                             .clipShape(Circle())
                                     }
                                     .buttonStyle(.plain)
-
+                                    
                                 }
                                 .padding(.vertical, 6)
                             }

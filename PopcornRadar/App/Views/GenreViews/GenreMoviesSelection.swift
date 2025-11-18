@@ -4,6 +4,8 @@ struct GenreMoviesSelection: View {
     let title: String
     let movies: [Movie]
     
+    let onReachEnd: (() -> Void)?
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(title)
@@ -38,7 +40,12 @@ struct GenreMoviesSelection: View {
                                 .multilineTextAlignment(.center)
                         }
                         .padding(.horizontal)
-                        }}
+                        }.onAppear {
+                            if movie == movies.last {
+                                onReachEnd?()
+                            }
+                        }
+                    }
                 }
                 .padding(.bottom, 30)
             }
@@ -46,3 +53,5 @@ struct GenreMoviesSelection: View {
         
     }
 }
+
+
