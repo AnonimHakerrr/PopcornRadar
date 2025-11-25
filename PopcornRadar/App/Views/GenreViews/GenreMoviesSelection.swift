@@ -7,49 +7,68 @@ struct GenreMoviesSelection: View {
     let onReachEnd: (() -> Void)?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .font(.largeTitle.bold())
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .padding(.top, 10)
-            
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: 20) {
-                    ForEach(movies) { movie in
-                        NavigationLink {
-                            DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id ))
-                        } label: { VStack(alignment: .center, spacing: 10){
-                            AsyncImage(url: movie.posterURL) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(minHeight: 150)
-                                    .cornerRadius(16)
-                                    .shadow(radius: 10)
-                            } placeholder: {
-                                ProgressView()
-                                    .frame(height: 450)
+        GeometryReader { geo in
+            let isLandscape = geo.size.width > geo.size.height
+
+           
+
+//                Text(title)
+//                    .font(.largeTitle.bold())
+//                    .foregroundColor(.white)
+//                    .padding(.horizontal)
+//                    .padding(.top, 10)
+
+                if isLandscape {
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 20) {
+                            ForEach(movies) { movie in
+                                NavigationLink {
+                                    DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id))
+                                } label: {
+                                    MovieCell(
+                                        movie: movie,
+                                        width: geo.size.height * 0.55,
+                                        isPortrait: false
+                                    )
+                                }
+                                .onAppear {
+                                    if movie == movies.last {
+                                        onReachEnd?()
+                                    }
+                                }
                             }
-                            
-                            Text(movie.title)
-                                .font(.title.bold())
-                                .padding(10)
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
                         }
                         .padding(.horizontal)
-                        }.onAppear {
-                            if movie == movies.last {
-                                onReachEnd?()
+                        .padding(.vertical)
+                    }
+
+                } else {
+                    ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 20) {
+                        ForEach(movies) { movie in
+                            NavigationLink {
+                                DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id))
+                            } label: {
+                                MovieCell(
+                                    movie: movie,
+                                    width: 250,
+                                    isPortrait: true
+                                )
+                            }
+                            .padding(.horizontal)
+                            .onAppear {
+                                if movie == movies.last {
+                                    onReachEnd?()
+                                }
                             }
                         }
                     }
+                    .padding(.bottom, 30)
                 }
-                .padding(.bottom, 30)
             }
         }
+
         
     }
 }

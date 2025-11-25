@@ -8,12 +8,6 @@ struct GenreMoviesView: View {
         ZStack {
             
             if let movies = genreVM.genreMovies[genre.id] {
-                //                ScrollView {
-                //                    VStack(alignment: .leading, spacing: 20) {
-                //                        GenreMoviesSelection(title: genre.name, movies: movies)
-                //                    }
-                //                    .padding(.top, 10)
-                //                }
                 GenreMoviesSelection(
                     title: genre.name,
                     movies: movies,

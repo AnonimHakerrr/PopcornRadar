@@ -11,80 +11,49 @@ struct SearchView: View {
                     .onTapGesture {
                         hideKeyboard()
                     }
-                
-                VStack {
-                    
-                    HStack {
-                        
-                        Image(systemName: "magnifyingglass")
-                        TextField("Пошук фільмів...", text: $viewModel.query)
-                            .textFieldStyle(.plain)
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                        if !viewModel.query.isEmpty {
-                            Button {
-                                viewModel.query = ""
-                                showEmptyIcon = false
-                                
-                                // даємо UI час очистити results
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                    showEmptyIcon = true
-                                }
-                                
-                            } label: {
-                                if viewModel.isLoading {
-                                    ProgressView()
-                                        .foregroundColor(.white)
-                                    
-                                }else{Image(systemName: "xmark.circle.fill")
-                                        .foregroundColor(.gray)
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        Text("Пошук")
+                            .font(.title)
+                            .font(.largeTitle.bold())
+                            .foregroundColor(.white)
+                            .padding(.horizontal)
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                            TextField("Пошук фільмів...", text: $viewModel.query)
+                                .textFieldStyle(.plain)
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
+                            
+                            if !viewModel.query.isEmpty {
+                                Button {
+                                    viewModel.query = ""
+                                    showEmptyIcon = false
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                        showEmptyIcon = true
+                                    }
+                                } label: {
+                                    if viewModel.isLoading {
+                                        ProgressView()
+                                            .foregroundColor(.white)
+                                    } else {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.gray)
+                                    }
                                 }
                             }
                         }
+                        .padding()
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
                         
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.1))
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    
-                    if viewModel.query.isEmpty && showEmptyIcon{
-                        VStack(spacing: 16) {
+                        if viewModel.query.isEmpty && showEmptyIcon{
                             
-                            ZStack {
-                                Circle()
-                                    .fill(Color.white.opacity(0.06))
-                                    .frame(width: 140, height: 140)
-                                    .blur(radius: 0)
-                                
-                                Image(systemName: "magnifyingglass")
-                                    .font(.system(size: 60, weight: .light))
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .opacity(showEmptyIcon ? 1 : 0)
-                                    .scaleEffect(showEmptyIcon ? 1 : 0.8)
-                                    .animation(
-                                        .snappy(duration: 0.35, extraBounce: 0.15),
-                                        value: showEmptyIcon
-                                    )
-                                
-                            }
-                            .padding(.top, 80)
-                            .transition(.opacity.combined(with: .scale))
-                            
-                            Text("Знайдіть свій улюблений фільм")
-                                .foregroundColor(.white.opacity(0.7))
-                                .font(.title3)
-                                .padding(.horizontal)
-                            
-                            Text("Почніть вводити назву у полі зверху")
-                                .foregroundColor(.white.opacity(0.4))
-                                .font(.subheadline)
-                            
-                            
+                            SearchNotStartedView(showEmptyIcon: showEmptyIcon)
                         }
-                    }
-                    
-                    ScrollView {
+                        
+                        
                         LazyVStack(spacing: 16) {
                             ForEach(viewModel.searchResults) { movie in
                                 NavigationLink {
@@ -118,15 +87,15 @@ struct SearchView: View {
                             }
                         }
                     }
-                    .simultaneousGesture(
-                        DragGesture().onChanged { _ in
-                            hideKeyboard()
-                        }
-                    )
+                    
                     .padding(.top)
                 }
             }
-            .navigationTitle("Пошук")
+            .simultaneousGesture(
+                DragGesture().onChanged { _ in
+                    hideKeyboard()
+                }
+            )
         }
     }
 }
@@ -135,4 +104,7 @@ extension View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                         to: nil, from: nil, for: nil)
     }
+}
+#Preview {
+    SearchView()
 }
