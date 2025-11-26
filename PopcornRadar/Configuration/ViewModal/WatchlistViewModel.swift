@@ -27,7 +27,7 @@ final class WatchlistViewModel: BaseViewModel {
     
     func toggle(movie: MovieDetail) {
         if let index = watchlist.firstIndex(where: { $0.id == movie.id }) {
-            watchlist.remove(at: index) // remove
+            watchlist.remove(at: index) 
         } else {
             let saved = SavedMovie(id: movie.id,
                                    title: movie.title,

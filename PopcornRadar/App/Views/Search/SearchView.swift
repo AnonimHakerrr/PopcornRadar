@@ -81,14 +81,11 @@ struct SearchView: View {
                                             
                                         }
                                         Spacer()
-                                    }
-                                    .padding(.horizontal)
+                                    }.padding(.horizontal)
                                 }
                             }
                         }
-                    }
-                    
-                    .padding(.top)
+                    }.padding(.top)
                 }
             }.simultaneousGesture(
                 DragGesture().onChanged { _ in

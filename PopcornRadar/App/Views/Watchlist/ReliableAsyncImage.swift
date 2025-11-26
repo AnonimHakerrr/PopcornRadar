@@ -15,7 +15,6 @@ struct ReliableAsyncImage: View {
                     .transition(.opacity)
                 
             case .failure(_):
-                // Якщо не загрузилось — повторна спроба
                 Color.gray.opacity(0.2)
                     .overlay(
                         Image(systemName: "photo")

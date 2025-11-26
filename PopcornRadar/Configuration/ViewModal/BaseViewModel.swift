@@ -36,8 +36,8 @@ class BaseViewModel: ObservableObject {
             let newItems = try await loader()
             
             var dict = owner[keyPath: dictKeyPath]
-            var currentItems = dict[key] ?? []          // якщо нема — створюємо
-            currentItems.append(contentsOf: newItems)   // ДОГРУЖАЄМО
+            var currentItems = dict[key] ?? []
+            currentItems.append(contentsOf: newItems) 
             dict[key] = currentItems
             
             owner[keyPath: dictKeyPath] = dict

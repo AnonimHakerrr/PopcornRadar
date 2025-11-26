@@ -12,7 +12,6 @@ final class SearchViewModel: BaseViewModel {
     init(service:MovieService = .shared){
         self.service = service
         super.init()
-        // Автопошук із затримкою (debounce)
         $query
             .removeDuplicates()
             .debounce(for: .milliseconds(400), scheduler: RunLoop.main)

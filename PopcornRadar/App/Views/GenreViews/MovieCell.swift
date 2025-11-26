@@ -30,23 +30,3 @@ struct MovieCell: View {
         }
     }
 }
-
-
-//AsyncImage(url: movie.posterURL) { image in
-//    image
-//        .resizable()
-//        .aspectRatio(contentMode: .fill)
-//        .frame(maxWidth: 250)
-//        .frame(minHeight: 250)
-//        .cornerRadius(16)
-//        .shadow(radius: 10)
-//} placeholder: {
-//    ProgressView()
-//        .frame(height: 450)
-//}
-//
-//Text(movie.title)
-//    .font(.title.bold())
-//    .padding(10)
-//    .foregroundColor(.white)
-//    .multilineTextAlignment(.center)

@@ -7,7 +7,6 @@ struct GenresView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // 🟣 Твій глобальний фон
                 Color.clear
                     .backgroundView()
                     .ignoresSafeArea()

@@ -31,10 +31,9 @@ struct MoviesView: View {
                 } else {
                     ScrollView(showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 25) {
-                            // 🔥 Секція трендів
+                            
                             MovieSection(title: "🔥 В тренді", movies: viewModel.trendingMovies)
                             
-                            // ⭐️ Секція популярних
                             MovieSection(title: "⭐️ Популярні", movies: viewModel.popularMovies)
                             
                             
@@ -43,7 +42,6 @@ struct MoviesView: View {
                                     MovieSection(title: genre.name, movies: movies)
                                     
                                 } else {
-                                    // Поки жанр не завантажився — показуємо лоадер
                                     HStack {
                                         ProgressView()
                                             .tint(.gray)

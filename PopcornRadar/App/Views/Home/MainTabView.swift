@@ -21,8 +21,8 @@ struct MainTabView:View {
                 .tabItem {
                     Label("Пошук", systemImage: "magnifyingglass")
                 }
-        }
-        .tint(.pink)
+        }.tint(.pink)
+        
     }
 }
 #Preview {
