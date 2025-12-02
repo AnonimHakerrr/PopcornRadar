@@ -27,7 +27,6 @@ struct DetailMovieView: View {
                         if isLandscape {
                             HStack(alignment: .top, spacing: 20) {
                                 
-                                // Постер зліва
                                 AsyncImage(url: movie.posterURL) { image in
                                     image.resizable()
                                         .scaledToFit()
@@ -38,8 +37,7 @@ struct DetailMovieView: View {
                                         .foregroundColor(.gray.opacity(0.3))
                                         .frame(width: geo.size.width * 0.35, height: 250)
                                 }
-                                
-                                // Контент справа
+                            
                                 VStack(alignment: .leading, spacing: 12) {
                                     
                                     Text(movie.title)
@@ -167,18 +165,12 @@ struct DetailMovieView: View {
         }
         .task {
             await viewDetailModel.loadDetailMovie()
-            guard let url = viewDetailModel.detailMoview?.posterURL else { return }
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                if let image = UIImage(data: data) {
-                    await MainActor.run {
-                        self.posterImage = image
+            if let url = viewDetailModel.detailMoview?.posterURL {
+                    if let data = try? Data(contentsOf: url),
+                       let image = UIImage(data: data) {
+                        posterImage = image
                     }
                 }
-            } catch {
-                // Optionally handle or log the error; avoid blocking the main thread
-                // print("Failed to load poster image: \(error)")
-            }
         }
     }
 }

@@ -10,8 +10,8 @@ final class GenreViewModal:BaseViewModel{
     
     private let service: MovieService
     
-    init(service: MovieService = .shared) {
-        self.service = service
+    init(service: MovieService? = nil) {
+        self.service = service ?? MovieService.shared
     }
     
     func loadGenres() async {
