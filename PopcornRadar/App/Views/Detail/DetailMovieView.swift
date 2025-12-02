@@ -167,12 +167,18 @@ struct DetailMovieView: View {
         }
         .task {
             await viewDetailModel.loadDetailMovie()
-            if let url = viewDetailModel.detailMoview?.posterURL {
-                    if let data = try? Data(contentsOf: url),
-                       let image = UIImage(data: data) {
-                        posterImage = image
+            guard let url = viewDetailModel.detailMoview?.posterURL else { return }
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                if let image = UIImage(data: data) {
+                    await MainActor.run {
+                        self.posterImage = image
                     }
                 }
+            } catch {
+                // Optionally handle or log the error; avoid blocking the main thread
+                // print("Failed to load poster image: \(error)")
+            }
         }
     }
 }
