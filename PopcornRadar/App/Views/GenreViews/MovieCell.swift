@@ -1,25 +1,24 @@
 import SwiftUI
-
+import Kingfisher
 struct MovieCell: View {
     let movie: Movie
     let width: CGFloat
     let isPortrait: Bool
-
+    
     var body: some View {
         VStack(spacing: 10) {
-
-            AsyncImage(url: movie.posterURL) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: width)
-                    .cornerRadius(16)
-                    .shadow(radius: 10)
-            } placeholder: {
-                ProgressView()
-                    .frame(width: width, height: width * (isPortrait ? 1.8 : 1.3))
-            }
-
+            
+            KFImage(movie.posterURL)
+                .placeholder {
+                    ProgressView()
+                        .frame(width: width, height: width * (isPortrait ? 1.8 : 1.3))
+                }.resizable()
+                .scaledToFit()
+                .frame(width: width)
+                .cornerRadius(16)
+                .shadow(radius: 10)
+            
+            
             Text(movie.title)
                 .font(isPortrait ? .title2.bold() : .title3.bold())
                 .foregroundColor(.white)

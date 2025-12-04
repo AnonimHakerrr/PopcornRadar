@@ -5,7 +5,11 @@ import Combine
 final class SearchViewModel: BaseViewModel {
     @Published var query: String = ""
     @Published var searchResults: [Movie] = []
-    
+    @Published var sortOption: MovieSortOption = .ratingDesc
+       
+       var sortedResults: [Movie] {
+           searchResults.filter { $0.isValidForSearchResult }.sorted(by: sortOption)
+       }
     private var cancellables = Set<AnyCancellable>()
     private let service: MovieService
     

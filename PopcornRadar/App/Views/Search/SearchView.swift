@@ -1,4 +1,5 @@
 import SwiftUI
+import Kingfisher
 
 struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
@@ -13,11 +14,33 @@ struct SearchView: View {
                     }
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text("Пошук")
-                            .font(.title)
-                            .font(.largeTitle.bold())
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
+                        HStack {
+                            Text("Пошук")
+                                .font(.title)
+                                .font(.largeTitle.bold())
+                                .foregroundColor(.white)
+                                .padding(.horizontal)
+                            Spacer() // 🔥 ТУТ
+                            Menu {
+                                ForEach(MovieSortOption.allCases) { option in
+                                    Button {
+                                        viewModel.sortOption = option
+                                    } label: {
+                                        HStack {
+                                            Text(option.title)
+                                            if option == viewModel.sortOption {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Label("",systemImage: "arrow.up.arrow.down")
+                                .font(.headline)
+                            }
+                        }
+                        
+                      
                         HStack {
                             Image(systemName: "magnifyingglass")
                             TextField("Пошук фільмів...", text: $viewModel.query)
@@ -55,17 +78,17 @@ struct SearchView: View {
                         
                         
                         LazyVStack(spacing: 16) {
-                            ForEach(viewModel.searchResults) { movie in
+                            ForEach(viewModel.sortedResults) { movie in
                                 NavigationLink {
                                     DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id))
                                 } label: {
                                     HStack(spacing: 12) {
-                                        AsyncImage(url: movie.posterURL) { image in
-                                            image.resizable().scaledToFill()
-                                        } placeholder: {
+                                        KFImage(movie.posterURL)
+                                            .placeholder {
                                             Rectangle()
                                                 .fill(Color.gray.opacity(0.2))
                                         }
+                                        .resizable().scaledToFill()
                                         .frame(width: 80, height: 120)
                                         .cornerRadius(8)
                                         .clipped()
@@ -93,11 +116,12 @@ struct SearchView: View {
                 }
             )
             
+                
+            }
         }
     }
-}
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),to: nil, from: nil, for: nil)
+    extension View {
+        func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),to: nil, from: nil, for: nil)
+        }
     }
-}

@@ -1,16 +1,18 @@
 import SwiftUI
+import Kingfisher
+
 struct DetailMovieView: View {
     @EnvironmentObject var watchlistVM: WatchlistViewModel
     @StateObject var viewDetailModel: DetailViewModel
     @State private var isSharePresented = false
     
     @State private var posterImage: UIImage?
-
+    
     private var shareItems: [Any] {
         posterImage.map { [$0] } ?? []
     }
-
-   
+    
+    
     var body: some View {
         GeometryReader { geo in
             let isLandscape = geo.size.width > geo.size.height
@@ -27,17 +29,18 @@ struct DetailMovieView: View {
                         if isLandscape {
                             HStack(alignment: .top, spacing: 20) {
                                 
-                                AsyncImage(url: movie.posterURL) { image in
-                                    image.resizable()
-                                        .scaledToFit()
-                                        .frame(width: geo.size.width * 0.35)
-                                        .cornerRadius(20)
-                                } placeholder: {
-                                    Rectangle()
-                                        .foregroundColor(.gray.opacity(0.3))
-                                        .frame(width: geo.size.width * 0.35, height: 250)
-                                }
-                            
+                                KFImage(movie.posterURL)
+                                    .placeholder {
+                                        Rectangle()
+                                            .foregroundColor(.gray.opacity(0.3))
+                                            .frame(width: geo.size.width * 0.35, height: 250)
+                                    }
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: geo.size.width * 0.35)
+                                    .cornerRadius(20)
+                                   
+                                
                                 VStack(alignment: .leading, spacing: 12) {
                                     
                                     Text(movie.title)
@@ -89,15 +92,14 @@ struct DetailMovieView: View {
                         else {
                             VStack(alignment: .leading, spacing: 16) {
                                 
-                                AsyncImage(url: movie.posterURL) { image in
-                                    image.resizable()
-                                        .scaledToFit()
-                                        .cornerRadius(20)
-                                } placeholder: {
-                                    Rectangle()
-                                        .foregroundColor(.gray.opacity(0.3))
-                                        .frame(height: 250)
-                                }
+                                KFImage(movie.posterURL)
+                                    .placeholder{
+                                        Rectangle()
+                                            .foregroundColor(.gray.opacity(0.3))
+                                            .frame(height: 250)
+                                    }.resizable()
+                                    .scaledToFit()
+                                    .cornerRadius(20)
                                 
                                 Text(movie.title)
                                     .font(.largeTitle.bold())
@@ -166,11 +168,11 @@ struct DetailMovieView: View {
         .task {
             await viewDetailModel.loadDetailMovie()
             if let url = viewDetailModel.detailMoview?.posterURL {
-                    if let data = try? Data(contentsOf: url),
-                       let image = UIImage(data: data) {
-                        posterImage = image
-                    }
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    posterImage = image
                 }
+            }
         }
     }
 }

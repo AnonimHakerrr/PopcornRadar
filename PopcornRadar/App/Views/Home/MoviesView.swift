@@ -39,8 +39,8 @@ struct MoviesView: View {
                             
                             ForEach(genreVM.genres.prefix(5)) { genre in
                                 if let movies = genreVM.genreMovies[genre.id] {
-                                    MovieSection(title: genre.name, movies: movies)
-                                    
+                                    MovieSection(title: genre.name, movies: movies){
+                                        GenreMoviesView(genre: genre,genreVM: genreVM)}
                                 } else {
                                     HStack {
                                         ProgressView()

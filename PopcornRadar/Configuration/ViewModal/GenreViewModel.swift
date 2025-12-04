@@ -7,7 +7,8 @@ final class GenreViewModal:BaseViewModel{
     @Published var genres: [Genre] = []
     @Published var currentPage: [Int: Int] = [:]
     @Published var totalPages: [Int: Int] = [:]
-    
+    @Published var sortOption: MovieSortOption = .ratingDesc
+
     private let service: MovieService
     
     init(service: MovieService? = nil) {
@@ -49,4 +50,9 @@ final class GenreViewModal:BaseViewModel{
             await loadMovies(for: genreID)
         }
     }
+    
+    func sortedMovies(for genreID: Int) -> [Movie] {
+          guard let movies = genreMovies[genreID] else { return [] }
+          return movies.sorted(by: sortOption)   
+      }
 }
