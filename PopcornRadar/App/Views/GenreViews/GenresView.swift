@@ -51,7 +51,7 @@ struct GenresView: View {
                 }
             }
         }
-        .navigationTitle("Категорії",)
+        .navigationTitle("Категорії")
         .task {
             await genreVM.loadGenres()
         }

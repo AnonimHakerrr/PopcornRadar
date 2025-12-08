@@ -1,15 +1,17 @@
 import SwiftUI
+import Kingfisher
 
 struct GenreMoviesSelection: View {
     let title: String
     let movies: [Movie]
     @State private var scrollPosition: Int?
     let onReachEnd: (() -> Void)?
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    private var isLandscape: Bool {
+        verticalSizeClass == .compact
+    }
     var body: some View {
-        GeometryReader { geo in
-            let isLandscape = geo.size.width > geo.size.height
-            
+        Group{
             if isLandscape {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -20,9 +22,10 @@ struct GenreMoviesSelection: View {
                             } label: {
                                 MovieCell(
                                     movie: movie,
-                                    width: geo.size.height * 0.55,
+                                    width: 150,
                                     isPortrait: false
                                 )
+                                
                             }
                             .id(movie.id)
                             .onAppear {
@@ -36,6 +39,7 @@ struct GenreMoviesSelection: View {
                     .padding(.vertical)
                     .scrollTargetLayout()
                 }.scrollPosition(id: $scrollPosition)
+                
                 
             } else {
                 ScrollView(showsIndicators: false) {
@@ -62,6 +66,7 @@ struct GenreMoviesSelection: View {
                     .scrollTargetLayout()
                     .padding(.bottom, 30)
                 }.scrollPosition(id: $scrollPosition)
+                
             }
         }
         

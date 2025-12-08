@@ -26,7 +26,6 @@ extension Array where Element == Movie {
         case .ratingDesc:
             return self.sorted { $0.voteAverage > $1.voteAverage }
         case .releaseDateDesc:
-            // Якщо формат "yyyy-MM-dd" — просте строкове порівняння працює
             return self.sorted { $0.releaseDate > $1.releaseDate }
         case .titleAsc:
             return self.sorted { $0.title < $1.title }
