@@ -8,6 +8,7 @@ final class GenreViewModal:BaseViewModel{
     @Published var currentPage: [Int: Int] = [:]
     @Published var totalPages: [Int: Int] = [:]
     @Published var sortOption: MovieSortOption = .ratingDesc
+    @Published private(set) var isLoadingMore: Set<Int> = []
 
     private let service: MovieService
     
@@ -22,37 +23,55 @@ final class GenreViewModal:BaseViewModel{
             assignTo: \.genres)
     }
 
-
+//
+//    func loadMovies(for genreID: Int) async {
+//        let page = currentPage[genreID, default: 1]
+//    
+//        currentPage[genreID] = page + 1
+//        await fetchDataAppendToDict(
+//            on: self,
+//            loader: {
+//                let response = try await self.service.getMoviesByGenre(
+//                    genreID: genreID,
+//                    page: page
+//                )
+//                self.totalPages[genreID] = response.totalPages
+//                return response.results
+//            },
+//            key: genreID,
+//            in: \.genreMovies
+//        )
+//    }
     func loadMovies(for genreID: Int) async {
-        let page = currentPage[genreID, default: 1]
+          if isLoadingMore.contains(genreID) { return }
+          isLoadingMore.insert(genreID)
+          defer { isLoadingMore.remove(genreID) }
 
-        await fetchDataAppendToDict(
-            on: self,
-            loader: {
-                let response = try await self.service.getMoviesByGenre(
-                    genreID: genreID,
-                    page: page
-                )
-                self.totalPages[genreID] = response.totalPages
-                return response.results
-            },
-            key: genreID,
-            in: \.genreMovies
-        )
+          let page = currentPage[genreID, default: 1]
+          let total = totalPages[genreID, default: Int.max]
+          guard page <= total else { return }
 
-        currentPage[genreID] = page + 1
-    }
-    func loadMoreIfNeeded(for genreID: Int) async {
-        let page = currentPage[genreID, default: 1]
-        let total = totalPages[genreID, default: 1]
+          do {
+              let response = try await service.getMoviesByGenre(genreID: genreID, page: page)
+              totalPages[genreID] = response.totalPages
+              let existingIDs = Set(genreMovies[genreID, default: []].map(\.id))
+              let newUnique = response.results.filter { !existingIDs.contains($0.id) }
+              genreMovies[genreID, default: []].append(contentsOf: newUnique)
+              currentPage[genreID] = page + 1
 
-        if page <= total {
-            await loadMovies(for: genreID)
-        }
-    }
-    
-    func sortedMovies(for genreID: Int) -> [Movie] {
-          guard let movies = genreMovies[genreID] else { return [] }
-          return movies.sorted(by: sortOption)   
+              print("✅ genre \(genreID) page \(page) / total \(response.totalPages) added \(newUnique.count)")
+          } catch {
+              print("❌ genre \(genreID) page \(page) error: \(error)")
+          }
       }
+
+      func loadMoreIfNeeded(for genreID: Int) async {
+          await loadMovies(for: genreID)
+      }
+
+    func applySort(for genreID: Int) {
+        guard let movies = genreMovies[genreID] else { return }
+        genreMovies[genreID] = movies.sorted(by: sortOption)
+    }
+
 }

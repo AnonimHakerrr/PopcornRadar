@@ -14,7 +14,8 @@ struct MovieCell: View {
                         .frame(width: width, height: width * (isPortrait ? 1.8 : 1.3))
                 }.resizable()
                 .scaledToFit()
-                .frame(width: width)
+                .frame(width: width, height: width * (isPortrait ? 1.8 : 1.3))
+                .clipped()
                 .cornerRadius(16)
                 .shadow(radius: 10)
             

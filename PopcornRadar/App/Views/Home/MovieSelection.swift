@@ -26,7 +26,6 @@ struct MovieSection<Destination: View>: View {
                     .font(.title2.bold())
                     .foregroundColor(.white)
                 Spacer()
-                // Only show the "All" link if Destination is not EmptyView
                 if let seeAllDestination {
                     NavigationLink {
                         seeAllDestination()

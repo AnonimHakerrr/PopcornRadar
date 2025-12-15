@@ -11,14 +11,14 @@ struct DetailMovieView: View {
     private var shareItems: [Any] {
         posterImage.map { [$0] } ?? []
     }
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    private var isLandscape: Bool { verticalSizeClass == .compact }
+
     
     var body: some View {
-        GeometryReader { geo in
-            let isLandscape = geo.size.width > geo.size.height
-            
+        Group{
             ZStack {
-                Color.clear.backgroundView().ignoresSafeArea()
+                Color.clear.backgroundView()
                 
                 if viewDetailModel.isLoading {
                     ProgressView("Завантаження...")
@@ -33,11 +33,11 @@ struct DetailMovieView: View {
                                     .placeholder {
                                         Rectangle()
                                             .foregroundColor(.gray.opacity(0.3))
-                                            .frame(width: geo.size.width * 0.35, height: 250)
+                                            .frame(width: 200, height: 200)
                                     }
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: geo.size.width * 0.35)
+                                    .frame(width: 200)
                                     .cornerRadius(20)
                                    
                                 
@@ -145,7 +145,7 @@ struct DetailMovieView: View {
                             }
                             .padding()
                         }
-                    }
+                    }.transaction { $0.animation = nil }
                 }
             }
         }

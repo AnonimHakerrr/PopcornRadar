@@ -58,8 +58,11 @@ struct MoviesView: View {
                     }
                 }
             }
+            .navigationTitle("Фільми")
+            .navigationBarTitleDisplayMode(.inline)
             
-        }.onAppear {
+        }
+        .onAppear {
             Task {
                 if viewModel.trendingMovies.isEmpty {
                     await viewModel.loadTrendingMovies()

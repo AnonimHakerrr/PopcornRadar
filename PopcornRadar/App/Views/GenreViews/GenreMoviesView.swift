@@ -6,19 +6,20 @@ struct GenreMoviesView: View {
     
     var body: some View {
         ZStack {
-            Color.clear
-                .backgroundView()
-                .ignoresSafeArea()
+            Color.clear.backgroundView()
             if let _ = genreVM.genreMovies[genre.id] {
                 GenreMoviesSelection(
                     title: genre.name,
-                    movies: genreVM.sortedMovies(for: genre.id),
+                    movies: genreVM.genreMovies[genre.id] ?? [],
                     onReachEnd: {
                         Task {
                             await genreVM.loadMoreIfNeeded(for: genre.id)
                         }
                     }
-                )
+                ).onChange(of: genreVM.sortOption) { _ in
+                    genreVM.applySort(for: genre.id)
+                }
+
                 
             } else if genreVM.isLoading {
                 ProgressView("Завантаження \(genre.name)...")
@@ -30,6 +31,7 @@ struct GenreMoviesView: View {
             
         }
         .navigationTitle(genre.name)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {

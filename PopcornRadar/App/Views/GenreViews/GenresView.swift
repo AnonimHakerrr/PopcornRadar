@@ -1,15 +1,12 @@
 import SwiftUI
-
 struct GenresView: View {
     @StateObject private var genreVM = GenreViewModal()
-    @State private var selectedGenre: Genre? = nil
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.clear
-                    .backgroundView()
-                    .ignoresSafeArea()
+                Color.clear.backgroundView()
+
                 if genreVM.isLoading {
                     ProgressView("Завантаження жанрів...")
                         .foregroundColor(.black)
@@ -18,16 +15,15 @@ struct GenresView: View {
                     Text("Помилка: \(error)")
                         .foregroundColor(.red)
                 } else {
-                    
                     ScrollView {
                         VStack(spacing: 24) {
-                            Text("Оберіть категорію 🎬")
-                                .font(.largeTitle.bold())
-                                .foregroundColor(.white)
-                                .padding(.top, 30)
+                           
+
                             FlowLayout(spacing: 23) {
                                 ForEach(genreVM.genres) { genre in
-                                    NavigationLink(destination: GenreMoviesView(genre: genre, genreVM: genreVM)) {
+                                    NavigationLink {
+                                        GenreMoviesView(genre: genre, genreVM: genreVM)
+                                    } label: {
                                         Text(genre.name)
                                             .font(.headline)
                                             .padding(.horizontal, 16)
@@ -44,16 +40,13 @@ struct GenresView: View {
                                     }
                                 }
                             }
-                            .padding()
                         }
                     }
-                    .scrollContentBackground(.hidden)
                 }
             }
-        }
-        .navigationTitle("Категорії")
-        .task {
-            await genreVM.loadGenres()
+            .navigationTitle("Оберіть категорію 🎬")
+            .navigationBarTitleDisplayMode(.inline)
+            .task { await genreVM.loadGenres() }
         }
     }
 }

@@ -16,7 +16,7 @@ struct GenreMoviesSelection: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 20) {
-                        ForEach(movies) { movie in
+                        ForEach(Array(movies.enumerated()), id: \.element.id) { index, movie in
                             NavigationLink {
                                 DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id))
                             } label: {
@@ -29,7 +29,7 @@ struct GenreMoviesSelection: View {
                             }
                             .id(movie.id)
                             .onAppear {
-                                if movie == movies.last {
+                                if index >= movies.count - 3 {
                                     onReachEnd?()
                                 }
                             }
@@ -37,14 +37,13 @@ struct GenreMoviesSelection: View {
                     }
                     .padding(.horizontal)
                     .padding(.vertical)
-                    .scrollTargetLayout()
                 }.scrollPosition(id: $scrollPosition)
                 
                 
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 20) {
-                        ForEach(movies) { movie in
+                        ForEach(Array(movies.enumerated()), id: \.element.id) { index, movie in
                             NavigationLink {
                                 DetailMovieView(viewDetailModel: DetailViewModel(movieID: movie.id))
                             } label: {
@@ -57,13 +56,12 @@ struct GenreMoviesSelection: View {
                             .id(movie.id)
                             .padding(.horizontal)
                             .onAppear {
-                                if movie == movies.last {
+                                if index >= movies.count - 3 {
                                     onReachEnd?()
                                 }
                             }
                         }
                     }
-                    .scrollTargetLayout()
                     .padding(.bottom, 30)
                 }.scrollPosition(id: $scrollPosition)
                 
